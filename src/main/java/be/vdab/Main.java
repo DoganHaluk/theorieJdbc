@@ -29,6 +29,7 @@ class Main {
             repository2.findAllNamen().forEach(System.out::println);
             System.out.print("Aantal leveranciers:");
             System.out.println(repository2.findAantal());
+            repository2.findAll().forEach(System.out::println);
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
         }
