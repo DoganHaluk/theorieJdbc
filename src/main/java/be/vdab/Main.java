@@ -1,5 +1,6 @@
 package be.vdab;
 
+import be.vdab.repositories.LeverancierRepository;
 import be.vdab.repositories.PlantRepository;
 
 import java.sql.DriverManager;
@@ -16,10 +17,16 @@ class Main {
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
         }
-        var repository = new PlantRepository();
+        var repository1 = new PlantRepository();
         try {
-            System.out.print(repository.verhoogPrijzenMet10Procent());
+            System.out.print(repository1.verhoogPrijzenMet10Procent());
             System.out.println(" planten aangepast.");
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.err);
+        }
+        var repository2 = new LeverancierRepository();
+        try {
+            repository2.findAllNamen().forEach(System.out::println);
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
         }
