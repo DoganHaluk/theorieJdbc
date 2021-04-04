@@ -7,16 +7,17 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 class Main {
-    private static final String URL = "jdbc:mysql://localhost/tuincentrum";
+    /*private static final String URL = "jdbc:mysql://localhost/tuincentrum";
     private static final String USER = "root";
-    private static final String PASSWORD = "Dorado.7";
+    private static final String PASSWORD = "Dorado.7";*/
 
     public static void main(String[] args) {
-        try (var connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
+        /*try (var connection = DriverManager.getConnection(URL, USER, PASSWORD)) {
             System.out.println("Connectie geopend");
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
-        }
+        }*/
+
         var repository1 = new PlantRepository();
         try {
             System.out.print(repository1.verhoogPrijzenMet10Procent());
@@ -24,6 +25,7 @@ class Main {
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
         }
+
         var repository2 = new LeverancierRepository();
         try {
             repository2.findAllNamen().forEach(System.out::println);
