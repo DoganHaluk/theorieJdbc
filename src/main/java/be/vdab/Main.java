@@ -37,8 +37,18 @@ class Main {
             ex.printStackTrace(System.err);
         }
 
-        System.out.print("Naam:");
+        System.out.print("Woonplaats:");
         var scanner = new Scanner(System.in);
+        var woonplaats = scanner.nextLine();
+        var repository = new LeverancierRepository();
+        try {
+            repository.findByWoonplaats(woonplaats).forEach(System.out::println);
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.err);
+        }
+
+        System.out.print("Naam:");
+        scanner = new Scanner(System.in);
         var naam = scanner.nextLine();
         var repository3 = new PlantRepository();
         try {

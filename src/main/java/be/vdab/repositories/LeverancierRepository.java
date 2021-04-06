@@ -32,6 +32,10 @@ public class LeverancierRepository extends AbstractRepository {
         }
     }
 
+    private Leverancier naarLeverancier(ResultSet result) throws SQLException {
+        return new Leverancier(result.getLong("id"), result.getString("naam"), result.getString("adres"), result.getInt("postcode"), result.getString("woonplaats"), result.getObject("sinds", LocalDate.class));
+    }
+
     public List<Leverancier> findAll() throws SQLException {
         try (var connection = super.getConnection();
              var statement = connection.prepareStatement(
@@ -45,7 +49,18 @@ public class LeverancierRepository extends AbstractRepository {
         }
     }
 
-    private Leverancier naarLeverancier(ResultSet result) throws SQLException {
-        return new Leverancier(result.getLong("id"), result.getString("naam"), result.getString("adres"), result.getInt("postcode"), result.getString("woonplaats"), result.getObject("sinds", LocalDate.class));
+    public List<Leverancier> findByWoonplaats(String woonplaats) throws SQLException {
+        var sql =
+                "select id,naam,adres,postcode,woonplaats,sinds from leveranciers where woonplaats=?";
+        try (var connection = super.getConnection();
+             var statement = connection.prepareStatement(sql)) {
+            statement.setString(1, woonplaats);
+            var leveranciers = new ArrayList<Leverancier>();
+            var result = statement.executeQuery();
+            while (result.next()) {
+                leveranciers.add(naarLeverancier(result));
+            }
+            return leveranciers;
+        }
     }
 }
