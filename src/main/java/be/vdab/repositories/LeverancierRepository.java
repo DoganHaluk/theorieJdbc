@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class LeverancierRepository extends AbstractRepository {
     public List<String> findAllNamen() throws SQLException {
@@ -51,7 +52,7 @@ public class LeverancierRepository extends AbstractRepository {
 
     public List<Leverancier> findByWoonplaats(String woonplaats) throws SQLException {
         var sql =
-                "select id,naam,adres,postcode,woonplaats,sinds from leveranciers where woonplaats=?";
+                "select id,naam,adres,postcode,woonplaats,sinds from leveranciers where woonplaats = ?";
         try (var connection = super.getConnection();
              var statement = connection.prepareStatement(sql)) {
             statement.setString(1, woonplaats);
@@ -61,6 +62,18 @@ public class LeverancierRepository extends AbstractRepository {
                 leveranciers.add(naarLeverancier(result));
             }
             return leveranciers;
+        }
+    }
+
+    public Optional<Leverancier> findById(long id) throws SQLException {
+        var sql =
+                "select id,naam,adres,postcode,woonplaats,sinds from leveranciers where id = ?";
+        try (var connection = super.getConnection();
+             var statement = connection.prepareStatement(sql)) {
+            statement.setLong(1, id);
+            var result = statement.executeQuery();
+            return result.next() ? Optional.of(naarLeverancier(result))
+                    : Optional.empty();
         }
     }
 }

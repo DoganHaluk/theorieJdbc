@@ -57,5 +57,17 @@ class Main {
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
         }
+
+        System.out.print("id:");
+        scanner = new Scanner(System.in);
+        var id = scanner.nextLong();
+        var repository4 = new LeverancierRepository();
+        try {
+            repository4.findById(id)
+                    .ifPresentOrElse(System.out::println,
+                            () -> System.out.println("Niet gevonden"));
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.err);
+        }
     }
 }
