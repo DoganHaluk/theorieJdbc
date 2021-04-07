@@ -79,5 +79,13 @@ class Main {
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
         }
+
+        var repository1 = new PlantRepository();
+        try {
+            System.out.print(repository1.verhoogPrijzenBovenEnOnder100€());
+            System.out.println(" planten aangepast.");
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.err);
+        }
     }
 }
