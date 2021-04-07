@@ -69,5 +69,15 @@ class Main {
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
         }
+
+        System.out.print("Woord:");
+        scanner = new Scanner(System.in);
+        var woord = scanner.nextLine();
+        var repository5 = new PlantRepository();
+        try {
+            repository5.findNamenByWoord(woord).forEach(System.out::println);
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.err);
+        }
     }
 }
