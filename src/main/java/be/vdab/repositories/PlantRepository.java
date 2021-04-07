@@ -46,7 +46,7 @@ public class PlantRepository extends AbstractRepository {
             statementVanaf100.executeUpdate();
             statementTot100.executeUpdate();
             connection.commit();
-            return statementVanaf100.executeUpdate()+ statementTot100.executeUpdate();
+            return statementVanaf100.executeUpdate() + statementTot100.executeUpdate();
         }
     }
 }
