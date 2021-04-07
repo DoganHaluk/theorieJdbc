@@ -36,7 +36,7 @@ public class PlantRepository extends AbstractRepository {
         }
     }
 
-    public int verhoogPrijzenBovenEnOnder100€() throws SQLException {
+    public int verhoogPrijzenBovenEnOnder100Euro() throws SQLException {
         var sqlVanaf100 = "update planten set prijs = prijs * 1.1 where prijs >= 100";
         var sqlTot100 = "update planten set prijs = prijs * 1.05 where prijs < 100";
         try (var connection = super.getConnection();

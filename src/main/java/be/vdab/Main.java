@@ -82,7 +82,7 @@ class Main {
 
         var repository1 = new PlantRepository();
         try {
-            System.out.print(repository1.verhoogPrijzenBovenEnOnder100€());
+            System.out.print(repository1.verhoogPrijzenBovenEnOnder100Euro());
             System.out.println(" planten aangepast.");
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
