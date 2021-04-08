@@ -11,6 +11,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashSet;
 import java.util.Scanner;
 
 class Main {
@@ -134,9 +135,25 @@ class Main {
         try {
             repository9.verlaagPrijsTotMaximumHelft(plantId, nieuwePrijs);
             System.out.println("Prijs aangepast");
-        } catch (PlantNietGevondenException ex) {System.out.println("Plant niet gevonden.");}
-        catch (PrijsTeLaagException ex) {System.out.println("Prijs te laag.");}
-        catch (SQLException ex) {ex.printStackTrace(System.err);
+        } catch (PlantNietGevondenException ex) {
+            System.out.println("Plant niet gevonden.");
+        } catch (PrijsTeLaagException ex) {
+            System.out.println("Prijs te laag.");
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.err);
+        }
+
+        var ids = new HashSet<Long>();
+        scanner = new Scanner(System.in);
+        System.out.print("Nummer plant (0 om te stoppen):");
+        for (long id; (id = scanner.nextInt()) != 0; ) {
+            ids.add(id);
+        }
+        var repository10 = new PlantRepository();
+        try {
+            repository10.findNamenByIds(ids).forEach(System.out::println);
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.err);
         }
     }
 }
