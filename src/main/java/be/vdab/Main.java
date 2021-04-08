@@ -95,8 +95,8 @@ class Main {
         var soortNaam = scanner.nextLine();
         var repository6 = new SoortRepository();
         try {
-            repository6.create(soortNaam);
-            System.out.println("Soort toegevoegd.");
+            var nieuweId = repository6.create(soortNaam);
+            System.out.println("Soort toegevoegd. Het nummer is " + nieuweId);
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
         } catch (SoortBestaatAlException ex) {
