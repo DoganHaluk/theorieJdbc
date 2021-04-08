@@ -1,5 +1,6 @@
 package be.vdab.repositories;
 
+import be.vdab.dto.PlantNaamEnLeveranciersNaam;
 import be.vdab.exceptions.PlantNietGevondenException;
 import be.vdab.exceptions.PrijsTeLaagException;
 
@@ -106,6 +107,23 @@ public class PlantRepository extends AbstractRepository {
             }
             connection.commit();
             return namen;
+        }
+    }
+
+    public List<PlantNaamEnLeveranciersNaam> findRodePlantenEnHunLeveranciers() throws SQLException {
+        var sql = "select planten.naam as plantnaam, leveranciers.naam as leveranciersnaam from planten inner join leveranciers on planten.leverancierId=leveranciers.id where kleur = 'rood'";
+        try (var connection = super.getConnection();
+             var statement = connection.prepareStatement(sql)) {
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+            connection.setAutoCommit(false);
+            var list = new ArrayList<PlantNaamEnLeveranciersNaam>();
+            var result = statement.executeQuery();
+            while (result.next()) {
+                list.add(new PlantNaamEnLeveranciersNaam(result.getString("plantnaam"),
+                        result.getString("leveranciersnaam")));
+            }
+            connection.commit();
+            return list;
         }
     }
 }

@@ -155,5 +155,12 @@ class Main {
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
         }
+
+        var repository11 = new PlantRepository();
+        try {
+            repository11.findRodePlantenEnHunLeveranciers().forEach(System.out::println);
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.err);
+        }
     }
 }
