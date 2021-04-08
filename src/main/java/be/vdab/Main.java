@@ -1,5 +1,7 @@
 package be.vdab;
 
+import be.vdab.exceptions.PlantNietGevondenException;
+import be.vdab.exceptions.PrijsTeLaagException;
 import be.vdab.exceptions.SoortBestaatAlException;
 import be.vdab.repositories.LeverancierRepository;
 import be.vdab.repositories.PlantRepository;
@@ -64,10 +66,10 @@ class Main {
 
         System.out.print("id:");
         scanner = new Scanner(System.in);
-        var id = scanner.nextLong();
+        var leverancierId = scanner.nextLong();
         var repository4 = new LeverancierRepository();
         try {
-            repository4.findById(id)
+            repository4.findById(leverancierId)
                     .ifPresentOrElse(System.out::println,
                             () -> System.out.println("Niet gevonden"));
         } catch (SQLException ex) {
@@ -121,6 +123,20 @@ class Main {
             repository8.findLeverancierGewordenInHetJaar2000().forEach(System.out::println);
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
+        }
+
+        scanner = new Scanner(System.in);
+        System.out.print("Nummer plant:");
+        var plantId = scanner.nextLong();
+        System.out.print("Nieuwe prijs:");
+        var nieuwePrijs = scanner.nextBigDecimal();
+        var repository9 = new PlantRepository();
+        try {
+            repository9.verlaagPrijsTotMaximumHelft(plantId, nieuwePrijs);
+            System.out.println("Prijs aangepast");
+        } catch (PlantNietGevondenException ex) {System.out.println("Plant niet gevonden.");}
+        catch (PrijsTeLaagException ex) {System.out.println("Prijs te laag.");}
+        catch (SQLException ex) {ex.printStackTrace(System.err);
         }
     }
 }

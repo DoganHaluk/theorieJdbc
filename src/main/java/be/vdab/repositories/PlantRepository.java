@@ -1,5 +1,11 @@
 package be.vdab.repositories;
 
+import be.vdab.exceptions.PlantNietGevondenException;
+import be.vdab.exceptions.PrijsTeLaagException;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +53,35 @@ public class PlantRepository extends AbstractRepository {
             statementTot100.executeUpdate();
             connection.commit();
             return statementVanaf100.executeUpdate() + statementTot100.executeUpdate();
+        }
+    }
+
+    public void verlaagPrijsTotMaximumHelft(long id, BigDecimal nieuwePrijs) throws SQLException {
+        var sqlUpdate = "update planten set prijs = ? where id = ? and ? > prijs / 2";
+        try (var connection = super.getConnection();
+             var statementUpdate = connection.prepareStatement(sqlUpdate)) {
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+            connection.setAutoCommit(false);
+            statementUpdate.setBigDecimal(1, nieuwePrijs);
+            statementUpdate.setLong(2, id);
+            statementUpdate.setBigDecimal(3, nieuwePrijs);
+            var aantalAangepast = statementUpdate.executeUpdate();
+            if (aantalAangepast == 1) {
+                connection.commit();
+                return;
+            }
+            var sqlSelect = "select count(*) as aantal from planten where id = ?";
+            try (var statemenSelect = connection.prepareStatement(sqlSelect)) {
+                statemenSelect.setLong(1, id);
+                var result = statemenSelect.executeQuery();
+                result.next();
+                if (result.getLong("aantal") == 0) {
+                    connection.rollback();
+                    throw new PlantNietGevondenException();
+                }
+                connection.rollback();
+                throw new PrijsTeLaagException();
+            }
         }
     }
 }
