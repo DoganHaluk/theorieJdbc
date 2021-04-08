@@ -7,6 +7,8 @@ import be.vdab.repositories.SoortRepository;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
 
 class Main {
@@ -101,6 +103,24 @@ class Main {
             ex.printStackTrace(System.err);
         } catch (SoortBestaatAlException ex) {
             System.out.println("Soort bestaat al.");
+        }
+
+        System.out.print("Datum vanaf (dag/maand/jaar):");
+        var formatter = DateTimeFormatter.ofPattern("d/M/y");
+        scanner = new Scanner(System.in);
+        var datum = LocalDate.parse(scanner.nextLine(), formatter);
+        var repository7 = new LeverancierRepository();
+        try {
+            repository7.findBySindsVanaf(datum).forEach(System.out::println);
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.err);
+        }
+
+        var repository8 = new LeverancierRepository();
+        try {
+            repository8.findLeverancierGewordenInHetJaar2000().forEach(System.out::println);
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.err);
         }
     }
 }

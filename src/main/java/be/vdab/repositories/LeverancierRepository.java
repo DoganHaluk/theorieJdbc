@@ -2,6 +2,7 @@ package be.vdab.repositories;
 
 import be.vdab.domain.Leverancier;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -74,6 +75,39 @@ public class LeverancierRepository extends AbstractRepository {
             var result = statement.executeQuery();
             return result.next() ? Optional.of(naarLeverancier(result))
                     : Optional.empty();
+        }
+    }
+
+    public List<Leverancier> findBySindsVanaf(LocalDate datum) throws SQLException {
+        var sql = "select id,naam,adres,postcode,woonplaats,sinds from leveranciers where sinds >= ?";
+        try (var connection = super.getConnection();
+             var statement = connection.prepareStatement(sql)) {
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+            connection.setAutoCommit(false);
+            statement.setObject(1, datum);
+            var leveranciers = new ArrayList<Leverancier>();
+            var result = statement.executeQuery();
+            while (result.next()) {
+                leveranciers.add(naarLeverancier(result));
+            }
+            connection.commit();
+            return leveranciers;
+        }
+    }
+
+    public List<Leverancier> findLeverancierGewordenInHetJaar2000() throws SQLException {
+        var sql = "select id,naam,adres,postcode,woonplaats,sinds from leveranciers where {fn year(sinds)} = 2000";
+        try (var connection = super.getConnection();
+             var statement = connection.prepareStatement(sql)) {
+            connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
+            connection.setAutoCommit(false);
+            var leveranciers = new ArrayList<Leverancier>();
+            var result = statement.executeQuery();
+            while (result.next()) {
+                leveranciers.add(naarLeverancier(result));
+            }
+            connection.commit();
+            return leveranciers;
         }
     }
 }
