@@ -1,7 +1,9 @@
 package be.vdab;
 
+import be.vdab.exceptions.SoortBestaatAlException;
 import be.vdab.repositories.LeverancierRepository;
 import be.vdab.repositories.PlantRepository;
+import be.vdab.repositories.SoortRepository;
 
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -86,6 +88,19 @@ class Main {
             System.out.println(" planten aangepast.");
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
+        }
+
+        System.out.print("Naam:");
+        scanner = new Scanner(System.in);
+        var soortNaam = scanner.nextLine();
+        var repository6 = new SoortRepository();
+        try {
+            repository6.create(soortNaam);
+            System.out.println("Soort toegevoegd.");
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.err);
+        } catch (SoortBestaatAlException ex) {
+            System.out.println("Soort bestaat al.");
         }
     }
 }
