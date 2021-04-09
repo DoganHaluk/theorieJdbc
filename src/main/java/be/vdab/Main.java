@@ -11,6 +11,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 
@@ -44,7 +45,7 @@ class Main {
             ex.printStackTrace(System.err);
         }
 
-        System.out.print("Woonplaats:");
+        System.out.print("Woonplaats van leverancier:");
         var scanner = new Scanner(System.in);
         var woonplaats = scanner.nextLine();
         var repository = new LeverancierRepository();
@@ -54,18 +55,18 @@ class Main {
             ex.printStackTrace(System.err);
         }
 
-        System.out.print("Naam:");
+        System.out.print("Naam van een plant:");
         scanner = new Scanner(System.in);
-        var naam = scanner.nextLine();
+        var plantNaam = scanner.nextLine();
         var repository3 = new PlantRepository();
         try {
-            System.out.print(repository3.verhoogPrijzenMet10ProcentByNaam(naam));
+            System.out.print(repository3.verhoogPrijzenMet10ProcentByNaam(plantNaam));
             System.out.println(" plant(en) aangepast.");
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
         }
 
-        System.out.print("id:");
+        System.out.print("id van een leverancier:");
         scanner = new Scanner(System.in);
         var leverancierId = scanner.nextLong();
         var repository4 = new LeverancierRepository();
@@ -77,7 +78,7 @@ class Main {
             ex.printStackTrace(System.err);
         }
 
-        System.out.print("Woord:");
+        System.out.print("Woord in een plantnaam:");
         scanner = new Scanner(System.in);
         var woord = scanner.nextLine();
         var repository5 = new PlantRepository();
@@ -95,12 +96,12 @@ class Main {
             ex.printStackTrace(System.err);
         }
 
-        System.out.print("Naam:");
+        System.out.print("Naam van een soort:");
         scanner = new Scanner(System.in);
         var soortNaam = scanner.nextLine();
         var repository6 = new SoortRepository();
         try {
-            var nieuweId = repository6.create(soortNaam);
+            var nieuweId = repository6.createEenSoortnaam(soortNaam);
             System.out.println("Soort toegevoegd. Het nummer is " + nieuweId);
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
@@ -159,6 +160,20 @@ class Main {
         var repository11 = new PlantRepository();
         try {
             repository11.findRodePlantenEnHunLeveranciers().forEach(System.out::println);
+        } catch (SQLException ex) {
+            ex.printStackTrace(System.err);
+        }
+
+        var soortNamen = new ArrayList<String>();
+        scanner = new Scanner(System.in);
+        System.out.print("Naam van soort(stop met STOP):");
+        for (String naam; ! "STOP".equals(naam = scanner.nextLine()) ;) {
+            soortNamen.add(naam);
+        }
+        var repository12 = new SoortRepository();
+        try {
+            var gegenereerdeIds = repository12.createEenVerzamelingSoortnamen(soortNamen);
+            gegenereerdeIds.forEach(System.out::println);
         } catch (SQLException ex) {
             ex.printStackTrace(System.err);
         }
