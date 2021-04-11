@@ -39,14 +39,17 @@ public class SoortRepository extends AbstractRepository {
         }
     }
 
-    public List<Long> createEenVerzamelingSoortnamen (List<String> namen) throws SQLException {
+    public List<Long> createEenVerzamelingSoortnamen(List<String> namen) throws SQLException {
         try (var connection = super.getConnection();
              var statement = connection.prepareStatement(
                      "insert into soorten(naam) values (?)",
                      PreparedStatement.RETURN_GENERATED_KEYS)) {
             connection.setTransactionIsolation(Connection.TRANSACTION_READ_COMMITTED);
             connection.setAutoCommit(false);
-            for (String naam : namen) { statement.setString(1, naam); statement.addBatch(); }
+            for (String naam : namen) {
+                statement.setString(1, naam);
+                statement.addBatch();
+            }
             var gegenereerdeIds = new ArrayList<Long>();
             statement.executeBatch();
             var result = statement.getGeneratedKeys();
