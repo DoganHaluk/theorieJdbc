@@ -52,8 +52,7 @@ public class LeverancierRepository extends AbstractRepository {
     }
 
     public List<Leverancier> findByWoonplaats(String woonplaats) throws SQLException {
-        var sql =
-                "select id,naam,adres,postcode,woonplaats,sinds from leveranciers where woonplaats = ?";
+        var sql = "select id,naam,adres,postcode,woonplaats,sinds from leveranciers where woonplaats = ?";
         try (var connection = super.getConnection();
              var statement = connection.prepareStatement(sql)) {
             statement.setString(1, woonplaats);
